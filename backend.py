@@ -57,6 +57,9 @@ def get_data(place, days=None, kind=None, use_cache=False, update_cache=False):
     :return:
     """
     data = None
+    dates = None
+
+    # get all the data
     if use_cache:
         data = get_from_cache()
     if not data or not use_cache:
@@ -68,6 +71,8 @@ def get_data(place, days=None, kind=None, use_cache=False, update_cache=False):
     if days:
         data = data['list'][:8 * days]
 
+    dates = [item['dt_txt'] for item in data]
+
     # filter the kind of data
     match kind.lower():
         case None:
@@ -77,14 +82,14 @@ def get_data(place, days=None, kind=None, use_cache=False, update_cache=False):
         case 'sky':
             data = [item['weather'][0]['main'] for item in data]
 
-    return data
+    return data, dates
 
 
 if __name__ == '__main__':
-    data = get_data(place='volterra', days=5, kind='temperature', use_cache=True, update_cache=False)
-    print(json.dumps(data, indent=4))
-    print(len(data))
+    data, dates = get_data(place='volterra', days=5, kind='temperature', use_cache=True, update_cache=False)
+    print(data)
+    print(dates)
 
     data = get_data(place='volterra', days=5, kind='sky', use_cache=True, update_cache=False)
-    print(json.dumps(data, indent=4))
-    print(len(data))
+    print(data)
+    print(dates)
