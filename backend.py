@@ -20,6 +20,17 @@ def get_from_cache(cache_path='cache.json'):
     return data
 
 
+def save_cache(data, cache_path='cache.json'):
+    """
+    saves data dict to json file\n
+    :param data: data dict
+    :param cache_path: file path
+    """
+    print(f'Saving data to {cache_path}')
+    with open(cache_path, 'w') as cache_file:
+        json.dump(data, cache_file, indent=4)
+
+
 def get_from_api(place):
     """
     get weather data from api for the chosen place\n
@@ -36,7 +47,7 @@ def get_from_api(place):
     return data
 
 
-def get_data(place, days=None, kind=None, use_cache=False):
+def get_data(place, days=None, kind=None, use_cache=False, update_cache=False):
     """
     get weather data either from local file or from API, depending from use_cache\n
     :param place: city name
@@ -50,6 +61,8 @@ def get_data(place, days=None, kind=None, use_cache=False):
         data = get_from_cache()
     if not data or not use_cache:
         data = get_from_api(place)
+    if data and update_cache:
+        save_cache(data)
 
     # filter the number of days
     if days:
@@ -68,6 +81,6 @@ def get_data(place, days=None, kind=None, use_cache=False):
 
 
 if __name__ == '__main__':
-    data = get_data(place='volterra', days=5, kind='sky', use_cache=False)
+    data = get_data(place='volterra', days=5, kind='sky', use_cache=False, update_cache=True)
     print(json.dumps(data, indent=4))
     print(len(data))
