@@ -81,6 +81,10 @@ def get_data(place, days=None, kind=None, use_cache=False, update_cache=False):
 
 
 if __name__ == '__main__':
-    data = get_data(place='volterra', days=5, kind='sky', use_cache=False, update_cache=True)
+    data = get_data(place='volterra', days=5, kind='temperature', use_cache=True, update_cache=False)
+    print(json.dumps(data, indent=4))
+    print(len(data))
+
+    data = get_data(place='volterra', days=5, kind='sky', use_cache=True, update_cache=False)
     print(json.dumps(data, indent=4))
     print(len(data))
